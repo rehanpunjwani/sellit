@@ -1,3 +1,7 @@
+# Project Requirements and Features
+https://docs.google.com/document/d/1E1BqTfhk9fwax_1XEPNSJZXTeCDtFt9OOGoNtoCcEwU/edit?usp=sharing
+
+
 # Instructions
 
 Starter template for 😻 [NestJS](https://nestjs.com/) and [Prisma](https://www.prisma.io/).
