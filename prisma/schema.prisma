@@ -1,0 +1,125 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  // previewFeatures = []
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  password  String
+  firstname String?
+  lastname  String?
+  posts     Post[]
+  role      Role
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  published Boolean
+  title     String
+  content   String?
+  author    User?    @relation(fields: [authorId], references: [id])
+  authorId  String?
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model TireItemFile {
+  id        String          @id @default(cuid())
+  brand     TireBrand
+  size      TireSize
+  pattern   TirePattern
+  made      TireMade
+  tires     TireInventory[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@unique([brand, size, pattern, made], name: "brand_size_pattern_made")
+}
+
+model PurchaseBill {
+  id                 String          @id @default(cuid())
+  totalCost          Int
+  advancePaid        Int?
+  tireQuantity       Int
+  costPaid           Int
+  vendor             Vendor          @relation(fields: [vendor_id], references: [id])
+  vendor_id          String
+  tireInventoryItems TireInventory[]
+  nextPaymentDate    DateTime?
+  nextPaymentAmount  Int?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+}
+
+model Vendor {
+  id            String         @id @default(cuid())
+  name          String         @db.VarChar(30)
+  description   String?        @db.VarChar(100)
+  type          VendorType
+  purchaseBills PurchaseBill[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model TireInventory {
+  id                  String       @id @default(cuid())
+  itemFile            TireItemFile @relation(fields: [itemFileId], references: [id])
+  itemFileId          String
+  dateOfManufacture   DateTime
+  quantity            Int
+  sellingPrice        Int
+  averageSellingPrice Int
+  purchasePrice       Int
+  purchaseBill        PurchaseBill @relation(fields: [purchaseId], references: [id])
+  purchaseId          String
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  @@unique([itemFileId, dateOfManufacture], name: "itemFile_dateOfManufacture")
+}
+
+enum TireBrand {
+  BRIDGESTONE
+  MICHELIN
+  DUNLOP
+  SERVICE
+  YOKOHAMA
+}
+
+enum TireSize {
+  ONESEVENFIVE_SEVENTY
+  ONEEIGHTFIVE_EIGHTYFIVE
+}
+
+enum TirePattern {
+  CAMBER
+  CUP
+}
+
+enum TireMade {
+  PAKISTAN
+  JAPAN
+  INDONESIA
+}
+
+enum VendorType {
+  LOCAL
+  IMPORT
+}

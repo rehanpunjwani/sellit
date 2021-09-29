@@ -1,0 +1,127 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  email String [unique, not null]
+  password String [not null]
+  firstname String
+  lastname String
+  posts Post [not null]
+  role Role [not null]
+}
+
+Table Post {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  published Boolean [not null]
+  title String [not null]
+  content String
+  author User
+  authorId String
+}
+
+Table TireItemFile {
+  id String [pk]
+  brand TireBrand [not null]
+  size TireSize [not null]
+  pattern TirePattern [not null]
+  made TireMade [not null]
+  tires TireInventory [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+
+  indexes {
+    (brand, size, pattern, made) [unique]
+  }
+}
+
+Table PurchaseBill {
+  id String [pk]
+  totalCost Int [not null]
+  advancePaid Int
+  tireQuantity Int [not null]
+  costPaid Int [not null]
+  vendor Vendor [not null]
+  vendor_id String [not null]
+  tireInventoryItems TireInventory [not null]
+  nextPaymentDate DateTime
+  nextPaymentAmount Int
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Vendor {
+  id String [pk]
+  name String [not null]
+  description String
+  type VendorType [not null]
+  purchaseBills PurchaseBill [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table TireInventory {
+  id String [pk]
+  itemFile TireItemFile [not null]
+  itemFileId String [not null]
+  dateOfManufacture DateTime [not null]
+  quantity Int [not null]
+  sellingPrice Int [not null]
+  averageSellingPrice Int [not null]
+  purchasePrice Int [not null]
+  purchaseBill PurchaseBill [not null]
+  purchaseId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+
+  indexes {
+    (itemFileId, dateOfManufacture) [unique]
+  }
+}
+
+Enum Role {
+  ADMIN
+  USER
+}
+
+Enum TireBrand {
+  BRIDGESTONE
+  MICHELIN
+  DUNLOP
+  SERVICE
+  YOKOHAMA
+}
+
+Enum TireSize {
+  ONESEVENFIVE_SEVENTY
+  ONEEIGHTFIVE_EIGHTYFIVE
+}
+
+Enum TirePattern {
+  CAMBER
+  CUP
+}
+
+Enum TireMade {
+  PAKISTAN
+  JAPAN
+  INDONESIA
+}
+
+Enum VendorType {
+  LOCAL
+  IMPORT
+}
+
+Ref: Post.authorId > User.id
+
+Ref: PurchaseBill.vendor_id > Vendor.id
+
+Ref: TireInventory.itemFileId > TireItemFile.id
+
+Ref: TireInventory.purchaseId > PurchaseBill.id

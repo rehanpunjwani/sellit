@@ -1,0 +1,113 @@
+{
+  "name": "sell-it",
+  "version": "0.0.1",
+  "description": "supply chain management system for a tire seller",
+  "author": "Ahmed Nawaz Khan",
+  "license": "MIT",
+  "keywords": [
+    "NestJS",
+    "Prisma",
+    "Prisma Client",
+    "Typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahmednawazkhan/sellit"
+  },
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "migrate:dev": "prisma migrate dev --preview-feature",
+    "migrate:dev:create": "prisma migrate dev --create-only --preview-feature",
+    "migrate:reset": "prisma migrate reset --force --preview-feature",
+    "migrate:deploy": "npx prisma migrate deploy --preview-feature",
+    "migrate:status": "npx prisma migrate status --preview-feature",
+    "migrate:resolve": "npx prisma migrate resolve --preview-feature",
+    "prisma:studio": "npx prisma studio",
+    "prisma:generate": "npx prisma generate",
+    "prisma:generate:watch": "npx prisma generate --watch",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "dotenv -e .env.test -e .env -- npm run migrate:reset && dotenv -e .env.test -e .env -- jest --config ./test/jest-e2e.json --watchAll",
+    "start:db": "npm run migrate:up && npm run prisma:generate && npm run seed",
+    "seed": "ts-node prisma/seed.ts",
+    "postinstall": "npm run prisma:generate",
+    "docker:migrate": "docker-compose -f docker-compose.migrate.yml up -d",
+    "docker:db": "docker-compose -f docker-compose.db.yml up -d",
+    "docker:seed": "docker exec -it nest-api npm run seed",
+    "docker": "docker-compose up -d",
+    "docker:build": "docker-compose build"
+  },
+  "dependencies": {
+    "@devoxa/prisma-relay-cursor-connection": "2.0.2",
+    "@nestjs/common": "7.6.17",
+    "@nestjs/config": "0.6.3",
+    "@nestjs/core": "7.6.17",
+    "@nestjs/jwt": "7.2.0",
+    "@nestjs/passport": "7.1.5",
+    "@nestjs/platform-express": "7.6.17",
+    "@nestjs/swagger": "4.8.0",
+    "@prisma/client": "^2.24.1",
+    "bcrypt": "5.0.1",
+    "class-transformer": "0.4.0",
+    "class-validator": "0.13.1",
+    "passport": "0.4.1",
+    "passport-jwt": "4.0.0",
+    "reflect-metadata": "0.1.13",
+    "rimraf": "3.0.2",
+    "rxjs": "6.6.7",
+    "swagger-ui-express": "4.1.6"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "7.6.0",
+    "@nestjs/testing": "7.6.17",
+    "@types/bcrypt": "5.0.0",
+    "@types/chance": "1.1.1",
+    "@types/express": "4.17.12",
+    "@types/jest": "26.0.23",
+    "@types/node": "14.17.3",
+    "@types/supertest": "2.0.11",
+    "@typescript-eslint/eslint-plugin": "4.26.1",
+    "@typescript-eslint/parser": "4.26.1",
+    "chance": "1.1.7",
+    "dotenv-cli": "^4.0.0",
+    "eslint": "7.28.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-prettier": "3.4.0",
+    "jest": "26.6.3",
+    "prettier": "2.3.1",
+    "prisma": "^2.24.1",
+    "prisma-dbml-generator": "0.6.0",
+    "supertest": "6.1.3",
+    "ts-jest": "26.5.6",
+    "ts-loader": "8.3.0",
+    "ts-node": "9.1.1",
+    "tsconfig-paths": "3.9.0",
+    "typescript": "4.2.4"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
+}
